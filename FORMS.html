@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGM Credit Union</title>
+<!-- BOOTSTRAP CDN -->
+ <link
+ href="https://cdn.jsdelvr.net/npm/bootstrap@5.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body { font-family: Arial; background:#f4f6f9; }
+.container {
+    max-width:900px; margin:30px auto;
+    background:#fff; padding:25px; border-radius:10px;
+}
+.footer {
+    margin-top:30px;
+    padding:10px;
+    background:#212529;
+    color:rgb(250, 227, 215);
+    border-radius:10px;
+    text-align: center;
+}
+h1,h2{text-align:center;}
+.slogan{text-align:center;color:#2c7a7b;margin-bottom:20px;}
+h3{border-bottom:2px solid #2c7a7b;}
+label{display:block;margin-top:10px;font-weight:bold;}
+input,select,textarea{
+    width:100%;padding:8px;margin-top:5px;
+    border-radius:5px;border:1px solid #ccc;
+}
+.hidden{display:none;}
+button{
+    margin-top:20px;padding:12px;width:100%;
+    background:#2c7a7b;color:#fff;border:none;
+}
+table{width:100%;margin-top:20px;border-collapse:collapse;}
+th,td{padding:8px;border:1px solid #ddd;}
+th{background:#2c7a7b;color:#fff;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h1>AGM CREDIT UNION LTD.</h1>
+<div class="slogan">Trusted. Secure. Globally Alligned.</div>
+<h2>Investment Application Form</h2>
+
+<form action="https://formsubmit.co/agmofficial2022@gmail.com" method="POST">
+
+<!-- PERSONAL -->
+<label>Full Name</label>
+<input type="text" id="name" name="name" required>
+
+<label>Email</label>
+<input type="email" id="email" name="email" required>
+
+<!-- SHARES -->
+<h3>Share Subscription</h3>
+
+<label>Number of Shares</label>
+<input type="number" id="shares" name="shares" required>
+
+<p><b>Price per Share:</b> GH₵100 (Fixed)</p>
+<input type="number" id="price" value="100">
+
+<label>Total Amount (GH₵)</label>
+<input type="number" id="total" name="total" readonly>
+
+<!-- PAYMENT -->
+<h3>Payment Method</h3>
+
+<select id="paymentMethod" name="payment_method" onchange="togglePayment()" required>
+<option value="">Select</option>
+<option value="Mobile Money">Mobile Money</option>
+<option value="Bank Transfer">Bank Transfer</option>
+</select>
+
+<!-- MOMO -->
+<div id="momoSection" class="hidden">
+<p><b>MoMo Number:</b> 0553475856</p>
+<label>Transaction ID</label>
+<input type="text" id="transaction" name="transaction_id">
+</div>
+
+<!-- BANK -->
+<div id="bankSection" class="hidden">
+<p><b>Bank:</b> GCB Bank | Acc: 7131010015252</p>
+<label>Transaction Reference</label>
+<input type="text" id="transactionBank">
+</div>
+
+<!-- PERIOD SECTION -->
+<div class="row mb-3">
+
+    <div class="col-md-4">
+        <label>Period</label>
+        <select class="form-control" id="period" onchange="calculateEndDate()">
+            <option value="">Select</option>
+            <option value="3">3 Months</option>
+            <option value="6">6 Months</option>
+            <option value="12">1 Year</option>
+        </select>
+    </div>
+<script>
+function calculateEndDate(){
+    const startDateValue = document.getElementById("startDate").value;
+    const periodValue = document.getElementById("period").value;
+
+    if(!startDateValue || !periodValue){
+        document.getElementById("endDate").value = "";
+        return;
+    }
+
+    let startDate = new Date(startDateValue);
+
+    // Convert period to number of months
+    let months = parseInt(periodValue);
+
+    // Add months properly
+    let endDate = new Date(startDate);
+    endDate.setMonth(endDate.getMonth() + months);
+
+    // Format to YYYY-MM-DD (important fix)
+    let formatted = endDate.toISOString().split('T')[0];
+
+    document.getElementById("endDate").value = formatted;
+}
+</script>
+
+<!-- DECLARATION -->
+<h3>Declaration</h3>
+<label>
+<input type="checkbox" required>
+I hereby certify that the information provided is true and accurate 
+to the best of my knowledge and belief and dividends or returns are 
+not guaranteed and are subject to prevailing conditions.
+</label>
+
+<button type="submit" onclick="saveInvestor(); sendEmails();">
+Submit Application
+</button>
+
+</form>
+
+<!-- ADMIN DASHBOARD -->
+<h2>Admin Dashboard</h2>
+
+<table id="dataTable">
+<thead>
+<tr>
+<th>Name</th>
+<th>Shares</th>
+<th>Total</th>
+<th>Method</th>
+<th>Transaction</th>
+<th>Status</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+
+</div>
+
+<!-- EMAILJS -->
+<script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+(function(){
+emailjs.init("YOUR_PUBLIC_KEY");
+})();
+</script>
+
+<!-- FOOTER -->
+<div class="footer text-center">
+<h5>AGM Credit Union Ltd.</h5>
+<p>📍 Location: Nkwabeng – Bono East Region, Ghana</p>
+<p>📞 Tel: +233 553 475 856</p>
+<p>✉️ Email: agmofficial2022@gmail.com</p>
+<p class="text-secondary">© 2026 AGM Credit Union. All rights reserved.</p>
+</div>
+<script>
+// AUTO CALC
+function calc(){
+let s = document.getElementById("shares").value || 0;
+let p = document.getElementById("price").value || 0;
+document.getElementById("total").value = s * p;
+}
+document.getElementById("shares").oninput = calc;
+document.getElementById("price").oninput = calc;
+
+// PAYMENT TOGGLE
+function togglePayment(){
+let m = document.getElementById("paymentMethod").value;
+document.getElementById("momoSection").classList.add("hidden");
+document.getElementById("bankSection").classList.add("hidden");
+
+if(m==="Mobile Money") document.getElementById("momoSection").classList.remove("hidden");
+if(m==="Bank Transfer") document.getElementById("bankSection").classList.remove("hidden");
+}
+
+// SAVE TO DASHBOARD
+function saveInvestor(){
+let investors = JSON.parse(localStorage.getItem("investors")) || [];
+
+let data = {
+name: document.getElementById("name").value,
+shares: document.getElementById("shares").value,
+total: document.getElementById("total").value,
+method: document.getElementById("paymentMethod").value,
+ref: document.getElementById("transaction").value,
+status:"Pending"
+};
+
+investors.push(data);
+localStorage.setItem("investors", JSON.stringify(investors));
+loadTable();
+}
+
+// LOAD TABLE
+function loadTable(){
+let investors = JSON.parse(localStorage.getItem("investors")) || [];
+let table = document.querySelector("#dataTable tbody");
+table.innerHTML="";
+
+investors.forEach((inv,i)=>{
+table.innerHTML += `
+<tr>
+<td>${inv.name}</td>
+<td>${inv.shares}</td>
+<td>${inv.total}</td>
+<td>${inv.method}</td>
+<td>${inv.ref}</td>
+<td>${inv.status}</td>
+<td>
+<button onclick="approve(${i})">Approve</button>
+<button onclick="reject(${i})">Reject</button>
+</td>
+</tr>
+`;
+});
+}
+
+// ACTIONS
+function approve(i){
+let investors = JSON.parse(localStorage.getItem("investors"));
+investors[i].status="Approved";
+localStorage.setItem("investors", JSON.stringify(investors));
+loadTable();
+}
+
+function reject(i){
+let investors = JSON.parse(localStorage.getItem("investors"));
+investors[i].status="Rejected";
+localStorage.setItem("investors", JSON.stringify(investors));
+loadTable();
+}
+
+// EMAILS
+function sendEmails(){
+let data = {
+name: document.getElementById("name").value,
+email: document.getElementById("email").value,
+shares: document.getElementById("shares").value,
+total: document.getElementById("total").value,
+method: document.getElementById("paymentMethod").value,
+transaction: document.getElementById("transaction").value
+};
+
+// ADMIN
+emailjs.send("service_id","admin_template",data);
+
+// CUSTOMER
+emailjs.send("service_id","customer_template",data);
+}
+
+// INIT
+loadTable();
+</script>
+
+</body>
+</html>
